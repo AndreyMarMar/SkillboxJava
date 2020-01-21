@@ -12,9 +12,11 @@ public class MyPlayer {
 
     ArrayList<MediaPlayer> melodyList = new ArrayList<>();
     private int currentMelody = 0;
+    private String name = "";
 
-    public void addMelody(MediaPlayer melody) {
+    public void addMelody(MediaPlayer melody, String name) {
         melodyList.add(melody);
+        this.name = name;
 
     }
 
@@ -53,6 +55,6 @@ public class MyPlayer {
     @NonNull
     @Override
     public String toString() {
-        return super.toString();
+        return this.name;
     }
 }

@@ -25,10 +25,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myPlayer.addMelody(MediaPlayer.create(this, R.raw.elvis_tutti_frutti));
-        myPlayer.addMelody(MediaPlayer.create(this, R.raw.elvis_jailhouse_rock));
-        myPlayer.addMelody(MediaPlayer.create(this, R.raw.elvis_heartbreak_hotel));
-        myPlayer.addMelody(MediaPlayer.create(this, R.raw.elvis_falling_in_love));
+        myPlayer.addMelody(MediaPlayer.create(this, R.raw.elvis_tutti_frutti),"Тутти-Фрутти");
+        myPlayer.addMelody(MediaPlayer.create(this, R.raw.elvis_jailhouse_rock),"Тюремный рок");
+        myPlayer.addMelody(MediaPlayer.create(this, R.raw.elvis_heartbreak_hotel),"Отель разбитых сердец");
+        myPlayer.addMelody(MediaPlayer.create(this, R.raw.elvis_falling_in_love),"Не могу не влюбиться");
         btnStart = findViewById(R.id.btnPlay);
         tvElvis = findViewById(R.id.tvElvis);
 

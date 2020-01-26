@@ -2,39 +2,59 @@ package com.example.elvis;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.io.IOException;
+
 
 public class MainActivity extends AppCompatActivity {
 
     MyPlayer myPlayer = new MyPlayer();
     Button btnStart;
     TextView tvElvis;
-    ListView songList;
+    AssetManager assetManager;
+    String[] songsName;
+    AssetFileDescriptor assetFileDescriptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        myPlayer.addMelody(MediaPlayer.create(this, R.raw.elvis_tutti_frutti),"Тутти-Фрутти");
-        myPlayer.addMelody(MediaPlayer.create(this, R.raw.elvis_jailhouse_rock),"Тюремный рок");
-        myPlayer.addMelody(MediaPlayer.create(this, R.raw.elvis_heartbreak_hotel),"Отель разбитых сердец");
-        myPlayer.addMelody(MediaPlayer.create(this, R.raw.elvis_falling_in_love),"Не могу не влюбиться");
         btnStart = findViewById(R.id.btnPlay);
         tvElvis = findViewById(R.id.tvElvis);
 
-        songList = new ListView(this);
-        ArrayAdapter<MediaPlayer> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myPlayer.melodyList);
-        songList.setAdapter(adapter);
+        assetManager = getAssets();
+        songsName = getFileNames("songs");
+
+        try {
+            assetFileDescriptor = getApplicationContext().getAssets().openFd(songsName);
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(assetFileDescriptor.getFileDescriptor());
+            myPlayer.addMelody(mediaPlayer);
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    String[] getFileNames(String path) {
+
+        String [] list = null;
+        try {
+
+            list = assetManager.list(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     public void play(View view) {
@@ -59,18 +79,16 @@ public class MainActivity extends AppCompatActivity {
     public void onChoose(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Выбор композиции");
-        builder.setView(songList);
+//        builder.setView(songList);
 
-        //Здесь я попытался использовать метод setItems, для добавления списка мелодий. Но программа выводит ошибку.
 
-/*        builder.setItems(myPlayer.melodyList, new DialogInterface.OnClickListener() {
+
+        builder.setItems(songsName, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(),
-                        "Выбранная мелодия: " + myPlayer.melodyList.get(which),
-                        Toast.LENGTH_SHORT).show();
+                myPlayer.startMelody();
             }
-        });*/
+        });
 
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -91,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
+
+
+
 
 
 

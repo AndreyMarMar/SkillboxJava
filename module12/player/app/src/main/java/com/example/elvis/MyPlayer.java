@@ -48,6 +48,11 @@ public class MyPlayer {
         }
 
     }
+
+    public void startMelody(int songNumber) {
+        if (!melodyList.get(songNumber).isPlaying())
+            melodyList.get(songNumber).start();
+    }
 }
 
 

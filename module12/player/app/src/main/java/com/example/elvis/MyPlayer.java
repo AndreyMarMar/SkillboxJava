@@ -2,10 +2,7 @@ package com.example.elvis;
 
 import android.media.MediaPlayer;
 
-import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MyPlayer {
@@ -50,8 +47,16 @@ public class MyPlayer {
     }
 
     public void startMelody(int songNumber) {
-        if (!melodyList.get(songNumber).isPlaying())
+
+        if (melodyList.get(currentMelody).isPlaying()) {
+            melodyList.get(currentMelody).pause();
+            melodyList.get(currentMelody).seekTo(0);
             melodyList.get(songNumber).start();
+            currentMelody = songNumber;
+        } else {
+            currentMelody = songNumber;
+            melodyList.get(currentMelody).start();
+        }
     }
 }
 
